@@ -12,7 +12,7 @@ class InterestAmountCalculator implements InterestAmountCalculatorInterface
      * @param float $ratePerPeriod
      * @return float
      */
-    public function getInterestAmount(float $presentValue, float $ratePerPeriod) : float
+    public function getInterestAmount(float $presentValue, float $ratePerPeriod): float
     {
         $interestAmount = ($presentValue * ($ratePerPeriod / 100));
         return $interestAmount;
