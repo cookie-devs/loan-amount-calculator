@@ -8,14 +8,14 @@ namespace Kauri\Loan;
 class InterestAmountCalculator implements InterestAmountCalculatorInterface
 {
     /**
+     * Calculate interest amount for present value based on interest rate
      * @param float $presentValue
-     * @param float $ratePerPeriod
+     * @param float $interestRate
      * @return float
      */
-    public function getInterestAmount(float $presentValue, float $ratePerPeriod): float
+    public function getInterestAmount(float $presentValue, float $interestRate): float
     {
-        $interestAmount = ($presentValue * ($ratePerPeriod / 100));
+        $interestAmount = ($presentValue * ($interestRate / 100));
         return $interestAmount;
     }
-
 }

@@ -2,13 +2,13 @@
 
 declare(strict_types = 1);
 
-namespace Kauri\Loan;
+namespace Kauri\Loan\PaymentAmountCalculator;
 
+use Kauri\Loan\PaymentAmountCalculatorInterface;
 
-class PaymentAmountCalculator implements PaymentAmountCalculatorInterface
+class EqualPrincipalPaymentAmountCalculator implements PaymentAmountCalculatorInterface
 {
     /**
-     * @see http://www.financeformulas.net/Annuity_Payment_Formula.html
      * @param float $presentValue
      * @param float $ratePerPeriod
      * @param float $numberOfPeriods
@@ -16,11 +16,12 @@ class PaymentAmountCalculator implements PaymentAmountCalculatorInterface
      */
     public function getPaymentAmount(float $presentValue, float $ratePerPeriod, float $numberOfPeriods): float
     {
+        $principal = $presentValue / $numberOfPeriods;
+
         if ($ratePerPeriod > 0) {
-            $payment = (($ratePerPeriod / 100) * $presentValue) / (1 - pow(1 + ($ratePerPeriod / 100),
-                        -$numberOfPeriods));
+            $payment = $principal + $presentValue * ($ratePerPeriod / 100);
         } else {
-            $payment = $presentValue / $numberOfPeriods;
+            $payment = $principal;
         }
 
         return $payment;
