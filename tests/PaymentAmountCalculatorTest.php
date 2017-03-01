@@ -5,6 +5,7 @@ namespace Kauri\Loan\Test;
 
 use Kauri\Loan\PaymentAmountCalculator\AnnuityPaymentAmountCalculator;
 use Kauri\Loan\PaymentAmountCalculator\EqualPrincipalPaymentAmountCalculator;
+use Kauri\Loan\PaymentAmountCalculatorInterface;
 use PHPUnit\Framework\TestCase;
 
 class PaymentAmountCalculatorTest extends TestCase
@@ -12,46 +13,23 @@ class PaymentAmountCalculatorTest extends TestCase
     /**
      * @dataProvider loanData
      * @param $presentValue
+     * @param $yearlyInterestRate
      * @param $totalPeriod
      * @param $currentPeriod
-     * @param $yearlyInterestRate
      * @param $expected
+     * @param PaymentAmountCalculatorInterface $calculator
      */
     public function testGetPaymentAmount(
         $presentValue,
+        $yearlyInterestRate,
         $totalPeriod,
         $currentPeriod,
-        $yearlyInterestRate,
-        $expected
+        $expected,
+        PaymentAmountCalculatorInterface $calculator
     ) {
         $ratePerPeriod = $yearlyInterestRate / 360 * $currentPeriod;
         $numberOfPeriods = $totalPeriod / $currentPeriod;
 
-        $calculator = new AnnuityPaymentAmountCalculator();
-        $paymentAmount = $calculator->getPaymentAmount($presentValue, $ratePerPeriod, $numberOfPeriods);
-
-        $this->assertEquals($expected, round($paymentAmount, 2));
-    }
-
-    /**
-     * @dataProvider loadEqualPrincipalData
-     * @param $presentValue
-     * @param $yearlyInterestRate
-     * @param $totalPeriod
-     * @param $currentPeriod
-     * @param $expected
-     */
-    public function testGetEqualPrincipalPaymentAmount(
-        $presentValue,
-        $yearlyInterestRate,
-        $totalPeriod,
-        $currentPeriod,
-        $expected
-    ) {
-        $ratePerPeriod = $yearlyInterestRate / 360 * $currentPeriod;
-        $numberOfPeriods = $totalPeriod / $currentPeriod;
-
-        $calculator = new EqualPrincipalPaymentAmountCalculator();
         $paymentAmount = $calculator->getPaymentAmount($presentValue, $ratePerPeriod, $numberOfPeriods);
 
         $this->assertEquals($expected, round($paymentAmount, 2));
@@ -62,32 +40,26 @@ class PaymentAmountCalculatorTest extends TestCase
      */
     public function loanData(): array
     {
+        $annuityCalculator = new AnnuityPaymentAmountCalculator();
+        $equalCalculator = new EqualPrincipalPaymentAmountCalculator();
+
         return [
             // Exact
-            [900, 90, 60, 0, 600],
-            [900, 90, 30, 0, 300],
-            [300, 30, 30, 0, 300],
-            [900, 90, 60, 360, 1067.42],
-            [900, 90, 30, 360, 495.56],
-            [674.43, 60, 30, 360, 495.56],
-            [381.20, 30, 30, 360, 495.56],
+            [900, 0, 90, 60, 600, $annuityCalculator],
+            [900, 0, 90, 30, 300, $annuityCalculator],
+            [300, 0, 30, 30, 300, $annuityCalculator],
+            [900, 360, 90, 60, 1067.42, $annuityCalculator],
+            [900, 360, 90, 30, 495.56, $annuityCalculator],
+            [674.43, 360, 60, 30, 495.56, $annuityCalculator],
+            [381.20, 360, 30, 30, 495.56, $annuityCalculator],
             // Regular, 30 day month, 360 days a year
-            [5630, 1800, 30, 9, 116.87], // 60 payments, monthly, 360 days a year
-            [1000, 60, 30, 0, 500], // 2 payments, monthly, 360 days a year
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function loadEqualPrincipalData(): array
-    {
-        return [
-            [900, 0, 90, 30, 300],
-            [600, 0, 60, 30, 300],
-            [900, 360, 90, 30, 570],
-            [600, 360, 60, 30, 480],
-            [300, 360, 30, 30, 390]
+            [5630, 9, 1800, 30, 116.87, $annuityCalculator], // 60 payments, monthly, 360 days a year
+            [1000, 0, 60, 30, 500, $annuityCalculator], // 2 payments, monthly, 360 days a year
+            [900, 0, 90, 30, 300, $equalCalculator],
+            [600, 0, 60, 30, 300, $equalCalculator],
+            [900, 360, 90, 30, 570, $equalCalculator],
+            [600, 360, 60, 30, 480, $equalCalculator],
+            [300, 360, 30, 30, 390, $equalCalculator]
         ];
     }
 }
