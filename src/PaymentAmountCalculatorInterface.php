@@ -8,10 +8,16 @@ namespace Kauri\Loan;
 interface PaymentAmountCalculatorInterface
 {
     /**
+     * @param array $periods
      * @param float $presentValue
-     * @param float $ratePerPeriod
-     * @param float $numberOfPeriods
-     * @return float
+     * @param float $interestRate
+     * @param float $futureValue
+     * @return array
      */
-    public function getPaymentAmount(float $presentValue, float $ratePerPeriod, float $numberOfPeriods): float;
+    public function getPaymentAmounts(
+        array $periods,
+        float $presentValue,
+        float $interestRate,
+        float $futureValue
+    ): array;
 }
