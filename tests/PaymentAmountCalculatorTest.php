@@ -52,7 +52,8 @@ class PaymentAmountCalculatorTest extends TestCase
 
             [100, 0, [1 => 30], 100, $equalCalculator],
             [300, 0, [1 => 30, 30, 30], 100, $equalCalculator],
-            [300, 0, [1 => 30, 30, 30], 50, $equalCalculator, 150]
+            [300, 0, [1 => 30, 30, 30], 50, $equalCalculator, 150],
+            [300, 360, [1 => 30, 30, 30], 140, $equalCalculator, 150],
         ];
     }
 }

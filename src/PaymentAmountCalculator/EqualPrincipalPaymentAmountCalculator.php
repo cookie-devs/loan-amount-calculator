@@ -34,22 +34,12 @@ class EqualPrincipalPaymentAmountCalculator implements PaymentAmountCalculatorIn
             $paymentAmount = $this->getPaymentAmount($principalLeft, $futureValue, $ratePerPeriod,
                 $noOfRemainingPeriods);
 
-            $principalLeft = $this->decreasePrincipalLeft($principalLeft, $principal);
+            $principalLeft = $principalLeft - $principal;
 
             $paymentAmounts[$sequenceNo] = $paymentAmount;
         }
 
         return $paymentAmounts;
-    }
-
-    /**
-     * @param float $presentValue
-     * @param float $discount
-     * @return float
-     */
-    private function decreasePrincipalLeft(float $presentValue, float $discount)
-    {
-        return (float) ($presentValue - $discount);
     }
 
     /**
