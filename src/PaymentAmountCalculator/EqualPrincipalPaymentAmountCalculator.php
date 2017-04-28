@@ -34,7 +34,7 @@ class EqualPrincipalPaymentAmountCalculator implements PaymentAmountCalculatorIn
             $paymentAmount = $this->getPaymentAmount($principalLeft, $futureValue, $ratePerPeriod,
                 $noOfRemainingPeriods);
 
-            $principalLeft = $principalLeft - $principal;
+            $principalLeft = $this->decreasePrincipalLeft($principalLeft, $principal);
 
             $paymentAmounts[$sequenceNo] = $paymentAmount;
         }
@@ -43,38 +43,51 @@ class EqualPrincipalPaymentAmountCalculator implements PaymentAmountCalculatorIn
     }
 
     /**
-     * @param $interestRate
-     * @param $periodLength
-     * @return float|int
+     * @param float $presentValue
+     * @param float $discount
+     * @return float
      */
-    private function getPeriodInterestRate($interestRate, $periodLength)
+    private function decreasePrincipalLeft(float $presentValue, float $discount)
     {
-        return $interestRate / 360 * $periodLength;
+        return (float) ($presentValue - $discount);
     }
 
     /**
-     * @param $presentValue
-     * @param $futureValue
-     * @param $noOfPeriods
-     * @return float|int
+     * @param $interestRate
+     * @param $periodLength
+     * @return float
      */
-    private function getPrincipalPart($presentValue, $futureValue, $noOfPeriods)
+    private function getPeriodInterestRate(float $interestRate, float $periodLength): float
     {
-        return $principal = ($presentValue - $futureValue) / $noOfPeriods;
+        $periodRate = $interestRate / 360 * $periodLength;
+        return (float) $periodRate;
+    }
+
+    /**
+     * @param float $presentValue
+     * @param float $futureValue
+     * @param int $noOfPeriods
+     * @return float
+     */
+    private function getPrincipalPart(float $presentValue, float $futureValue, int $noOfPeriods): float
+    {
+        $principal = ($presentValue - $futureValue) / $noOfPeriods;
+
+        return (float) $principal;
     }
 
     /**
      * @param float $presentValue
      * @param float $futureValue
      * @param float $ratePerPeriod
-     * @param float $numberOfPeriods
+     * @param int $numberOfPeriods
      * @return float
      */
     private function getPaymentAmount(
         float $presentValue,
         float $futureValue,
         float $ratePerPeriod,
-        float $numberOfPeriods
+        int $numberOfPeriods
     ): float {
         $principal = $this->getPrincipalPart($presentValue, $futureValue, $numberOfPeriods);
 
@@ -84,6 +97,6 @@ class EqualPrincipalPaymentAmountCalculator implements PaymentAmountCalculatorIn
             $payment = $principal;
         }
 
-        return $payment;
+        return (float) $payment;
     }
 }

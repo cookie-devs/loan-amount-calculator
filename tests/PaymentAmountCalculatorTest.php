@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 class PaymentAmountCalculatorTest extends TestCase
 {
     /**
+     * @dataProvider loanData
      * @param $presentValue
      * @param $yearlyInterestRate
      * @param $periodsLengths
