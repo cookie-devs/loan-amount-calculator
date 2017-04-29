@@ -35,20 +35,11 @@ class PaymentAmountCalculatorTest extends TestCase
         $this->assertEquals($expected, round($paymentAmount, 2));
     }
 
-    /**
-     * @expectedException \ArgumentCountError
-     */
-    public function testConstructorArgumentCount()
+    public function testConstructor()
     {
-        new AnnuityPaymentAmountCalculator();
-    }
-
-    /**
-     * @expectedException \TypeError
-     */
-    public function testConstructorArgumentType()
-    {
-        new AnnuityPaymentAmountCalculator(false);
+        $interestCalculator = new InterestAmountCalculator();
+        $paymentAmountCalculator = new AnnuityPaymentAmountCalculator($interestCalculator);
+        $this->assertTrue($paymentAmountCalculator instanceof PaymentAmountCalculatorInterface);
     }
 
     /**
