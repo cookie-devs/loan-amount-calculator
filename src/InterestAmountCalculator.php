@@ -18,4 +18,15 @@ class InterestAmountCalculator implements InterestAmountCalculatorInterface
         $interestAmount = ($presentValue * ($interestRate / 100));
         return $interestAmount;
     }
+
+    /**
+     * @param float $interestRate Yearly interest rate (based on 360 days)
+     * @param float $periodLength Period length in days
+     * @return float
+     */
+    public function getPeriodInterestRate(float $interestRate, float $periodLength): float
+    {
+        $periodRate = $interestRate / 360 * $periodLength;
+        return (float) $periodRate;
+    }
 }

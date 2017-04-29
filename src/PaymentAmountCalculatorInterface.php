@@ -8,6 +8,12 @@ namespace Kauri\Loan;
 interface PaymentAmountCalculatorInterface
 {
     /**
+     * PaymentAmountCalculatorInterface constructor.
+     * @param InterestAmountCalculatorInterface $interestAmountCalculator
+     */
+    public function __construct(InterestAmountCalculatorInterface $interestAmountCalculator);
+
+    /**
      * @param array $periods
      * @param float $presentValue
      * @param float $interestRate

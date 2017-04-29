@@ -4,10 +4,9 @@ declare(strict_types = 1);
 
 namespace Kauri\Loan\PaymentAmountCalculator;
 
-use Kauri\Loan\PaymentAmountCalculatorInterface;
+use Kauri\Loan\PaymentAmountCalculator;
 
-
-class AnnuityPaymentAmountCalculator implements PaymentAmountCalculatorInterface
+class AnnuityPaymentAmountCalculator extends PaymentAmountCalculator
 {
     /**
      * @see http://www.financeformulas.net/Annuity_Payment_Formula.html
