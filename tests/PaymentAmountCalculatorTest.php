@@ -3,6 +3,7 @@
 namespace Kauri\Loan\Test;
 
 
+use Kauri\Loan\InterestAmountCalculator;
 use Kauri\Loan\PaymentAmountCalculator\AnnuityPaymentAmountCalculator;
 use Kauri\Loan\PaymentAmountCalculator\EqualPrincipalPaymentAmountCalculator;
 use Kauri\Loan\PaymentAmountCalculatorInterface;
@@ -34,13 +35,22 @@ class PaymentAmountCalculatorTest extends TestCase
         $this->assertEquals($expected, round($paymentAmount, 2));
     }
 
+    public function testConstructor()
+    {
+        $interestCalculator = new InterestAmountCalculator();
+        $paymentAmountCalculator = new AnnuityPaymentAmountCalculator($interestCalculator);
+        $this->assertTrue($paymentAmountCalculator instanceof PaymentAmountCalculatorInterface);
+    }
+
     /**
      * @return array
      */
     public function loanData(): array
     {
-        $annuityCalculator = new AnnuityPaymentAmountCalculator();
-        $equalCalculator = new EqualPrincipalPaymentAmountCalculator();
+        $interestCalculator = new InterestAmountCalculator();
+
+        $annuityCalculator = new AnnuityPaymentAmountCalculator($interestCalculator);
+        $equalCalculator = new EqualPrincipalPaymentAmountCalculator($interestCalculator);
 
         return [
             [100, 0, [1 => 30], 100, $annuityCalculator],

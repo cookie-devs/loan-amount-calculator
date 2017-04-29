@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace Kauri\Loan\PaymentAmountCalculator;
 
-use Kauri\Loan\PaymentAmountCalculatorInterface;
+use Kauri\Loan\PaymentAmountCalculator;
 
-class EqualPrincipalPaymentAmountCalculator implements PaymentAmountCalculatorInterface
+class EqualPrincipalPaymentAmountCalculator extends PaymentAmountCalculator
 {
     /**
      * @param array $periods
@@ -28,7 +28,7 @@ class EqualPrincipalPaymentAmountCalculator implements PaymentAmountCalculatorIn
         $principal = $this->getPrincipalPart($presentValue, $futureValue, $noOfPayments);
 
         foreach ($periods as $sequenceNo => $periodLength) {
-            $ratePerPeriod = $this->getPeriodInterestRate($interestRate, $periodLength);
+            $ratePerPeriod = $this->interestAmountCalculator->getPeriodInterestRate($interestRate, $periodLength);
             $noOfRemainingPeriods = $noOfPayments - $sequenceNo + 1;
 
             $paymentAmount = $this->getPaymentAmount($principalLeft, $futureValue, $ratePerPeriod,
@@ -40,17 +40,6 @@ class EqualPrincipalPaymentAmountCalculator implements PaymentAmountCalculatorIn
         }
 
         return $paymentAmounts;
-    }
-
-    /**
-     * @param $interestRate
-     * @param $periodLength
-     * @return float
-     */
-    private function getPeriodInterestRate(float $interestRate, float $periodLength): float
-    {
-        $periodRate = $interestRate / 360 * $periodLength;
-        return (float) $periodRate;
     }
 
     /**

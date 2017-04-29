@@ -13,4 +13,11 @@ interface InterestAmountCalculatorInterface
      * @return float
      */
     public function getInterestAmount(float $presentValue, float $interestRate): float;
+
+    /**
+     * @param float $interestRate
+     * @param float $periodLength
+     * @return float
+     */
+    public function getPeriodInterestRate(float $interestRate, float $periodLength): float;
 }
