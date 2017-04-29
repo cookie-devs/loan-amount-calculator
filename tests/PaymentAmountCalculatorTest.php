@@ -36,6 +36,22 @@ class PaymentAmountCalculatorTest extends TestCase
     }
 
     /**
+     * @expectedException \ArgumentCountError
+     */
+    public function testConstructorArgumentCount()
+    {
+        new AnnuityPaymentAmountCalculator();
+    }
+
+    /**
+     * @expectedException \TypeError
+     */
+    public function testConstructorArgumentType()
+    {
+        new AnnuityPaymentAmountCalculator(false);
+    }
+
+    /**
      * @return array
      */
     public function loanData(): array
